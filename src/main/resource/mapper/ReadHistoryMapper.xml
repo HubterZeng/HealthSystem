@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.ReadHistoryMapper">
+  <resultMap id="BaseResultMap" type="entity.ReadHistory">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="cons_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="docId" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, cons_id, docId
+  </sql>
+  <insert id="insertSelective" parameterType="entity.ReadHistory">
+    insert into readhistory
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="consId != null">
+        cons_id,
+      </if>
+      <if test="docid != null">
+        docId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="consId != null">
+        #{consId,jdbcType=INTEGER},
+      </if>
+      <if test="docid != null">
+        #{docid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="entity.ReadHistory">
+    update readhistory
+    <set>
+      <if test="consId != null">
+        cons_id = #{consId,jdbcType=INTEGER},
+      </if>
+      <if test="docid != null">
+        docId = #{docid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

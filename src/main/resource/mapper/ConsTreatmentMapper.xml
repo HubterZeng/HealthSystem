@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.ConsTreatmentMapper">
+  <resultMap id="BaseResultMap" type="entity.ConsTreatment">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="docId" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="cons_Id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="entity.ConsTreatment">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="docId" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="cons_Id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="treatments" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, docId, cons_Id
+  </sql>
+  <sql id="Blob_Column_List">
+    treatments
+  </sql>
+  <insert id="insertSelective" parameterType="entity.ConsTreatment">
+    insert into cons_treatment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="docid != null">
+        docId,
+      </if>
+      <if test="consId != null">
+        cons_Id,
+      </if>
+      <if test="treatments != null">
+        treatments,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="docid != null">
+        #{docid,jdbcType=INTEGER},
+      </if>
+      <if test="consId != null">
+        #{consId,jdbcType=INTEGER},
+      </if>
+      <if test="treatments != null">
+        #{treatments,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="entity.ConsTreatment">
+    update cons_treatment
+    <set>
+      <if test="docid != null">
+        docId = #{docid,jdbcType=INTEGER},
+      </if>
+      <if test="consId != null">
+        cons_Id = #{consId,jdbcType=INTEGER},
+      </if>
+      <if test="treatments != null">
+        treatments = #{treatments,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

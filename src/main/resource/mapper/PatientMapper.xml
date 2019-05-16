@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.PatientMapper">
+  <resultMap id="BaseResultMap" type="entity.Patient">
+    <constructor>
+      <idArg column="userId" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="userName" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="sex" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accountUser" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="passwordUser" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="user_phone" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="age" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="questionForReset" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    userId, userName, sex, accountUser, passwordUser, address, user_phone, age, questionForReset
+  </sql>
+  <insert id="insertSelective" parameterType="entity.Patient">
+    insert into patient
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="username != null">
+        userName,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="accountuser != null">
+        accountUser,
+      </if>
+      <if test="passworduser != null">
+        passwordUser,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="userPhone != null">
+        user_phone,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="questionforreset != null">
+        questionForReset,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="accountuser != null">
+        #{accountuser,jdbcType=VARCHAR},
+      </if>
+      <if test="passworduser != null">
+        #{passworduser,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="questionforreset != null">
+        #{questionforreset,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="entity.Patient">
+    update patient
+    <set>
+      <if test="username != null">
+        userName = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="accountuser != null">
+        accountUser = #{accountuser,jdbcType=VARCHAR},
+      </if>
+      <if test="passworduser != null">
+        passwordUser = #{passworduser,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        user_phone = #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="questionforreset != null">
+        questionForReset = #{questionforreset,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where userId = #{userid,jdbcType=INTEGER}
+  </update>
+
+</mapper>

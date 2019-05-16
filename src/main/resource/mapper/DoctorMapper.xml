@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.DoctorMapper">
+  <resultMap id="BaseResultMap" type="entity.Doctor">
+    <constructor>
+      <idArg column="docId" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="userName" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="sex" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="age" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="workYears" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="workPlace" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accountUser" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="passwordUser" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="questionForReset" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    docId, userName, sex, age, workYears, workPlace, address, accountUser, passwordUser, 
+    questionForReset
+  </sql>
+  <insert id="insertSelective" parameterType="entity.Doctor">
+    insert into doctor
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="docid != null">
+        docId,
+      </if>
+      <if test="username != null">
+        userName,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="workyears != null">
+        workYears,
+      </if>
+      <if test="workplace != null">
+        workPlace,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="accountuser != null">
+        accountUser,
+      </if>
+      <if test="passworduser != null">
+        passwordUser,
+      </if>
+      <if test="questionforreset != null">
+        questionForReset,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="docid != null">
+        #{docid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="workyears != null">
+        #{workyears,jdbcType=INTEGER},
+      </if>
+      <if test="workplace != null">
+        #{workplace,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="accountuser != null">
+        #{accountuser,jdbcType=CHAR},
+      </if>
+      <if test="passworduser != null">
+        #{passworduser,jdbcType=VARCHAR},
+      </if>
+      <if test="questionforreset != null">
+        #{questionforreset,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="entity.Doctor">
+    update doctor
+    <set>
+      <if test="username != null">
+        userName = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="workyears != null">
+        workYears = #{workyears,jdbcType=INTEGER},
+      </if>
+      <if test="workplace != null">
+        workPlace = #{workplace,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="accountuser != null">
+        accountUser = #{accountuser,jdbcType=CHAR},
+      </if>
+      <if test="passworduser != null">
+        passwordUser = #{passworduser,jdbcType=VARCHAR},
+      </if>
+      <if test="questionforreset != null">
+        questionForReset = #{questionforreset,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where docId = #{docid,jdbcType=INTEGER}
+  </update>
+</mapper>
