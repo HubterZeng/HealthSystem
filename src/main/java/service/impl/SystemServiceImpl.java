@@ -1,13 +1,20 @@
 package service.impl;
 
-import dao.ConsHistoryMapper;
-import dao.DoctorMapper;
-import dao.FriendsMapper;
-import dao.PatientMapper;
+import dao.*;
 import entity.ConsHistory;
 import entity.Doctor;
 import entity.Friends;
 import entity.Patient;
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
+import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.SystemService;
@@ -26,6 +33,8 @@ public class SystemServiceImpl implements SystemService {
     FriendsMapper friendsMapper;
     @Autowired
     ConsHistoryMapper consHistoryMapper;
+    @Autowired
+    MessageMapper messageMapper;
 
     @Override
     public boolean uniqueAcCheck(String userAccount) {
@@ -95,5 +104,67 @@ public class SystemServiceImpl implements SystemService {
     public List<ConsHistory> findAllQuestions() {
          return  consHistoryMapper.selectAll();
     }
+
+    @Override
+    public List<MessageExt> consume( String toId) {
+        DefaultMQPushConsumer consumer =
+                new DefaultMQPushConsumer(toId);
+        consumer.setNamesrvAddr("47.102.198.100:9876");
+        consumer.setVipChannelEnabled(false);
+        List<MessageExt> messageList=new ArrayList<>();
+        try{
+            consumer.subscribe(toId,"*");
+            consumer.setConsumeFromWhere(
+                    ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
+            consumer.registerMessageListener(new MessageListenerConcurrently() {
+                public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list, ConsumeConcurrentlyContext Context) {
+                    messageList.addAll(list);
+//                                                     Message msg = list.get(0);
+//                                                     String topic = msg.getTopic();
+//                                                     byte[] body = msg.getBody();
+//                                                     String keys = msg.getKeys();
+//                                                     System.out.println("keys = " + keys);
+//                                                     String tags = msg.getTags();
+//                                                     System.out.println("tags = " + tags);
+                    return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+                }
+            });
+            consumer.start();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        consumer.shutdown();
+        return messageList;
+    }
+    @Override
+    public boolean produce(String fromId, String toId,String news) {
+        boolean isOK=false;
+        DefaultMQProducer producer = new DefaultMQProducer("Producer");
+        producer.setNamesrvAddr("47.102.198.100:9876");
+        producer.setVipChannelEnabled(false);
+        try {
+            producer.start();
+            Message msg = new Message(toId,
+                    fromId, "1",
+                    news.getBytes());
+            SendResult result = producer.send(msg);
+            if(result.getSendStatus().equals("SEND_OK")){
+               isOK=true;
+            }
+            entity.Message record=new entity.Message();
+            record.setFromid(fromId);
+            record.setToid(toId);
+            record.setMessagedata(news);
+            record.setIsread(true);
+            messageMapper.insert(record);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            producer.shutdown();
+        }
+        return isOK;
+    }
+
+
 
 }

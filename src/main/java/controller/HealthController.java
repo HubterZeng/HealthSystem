@@ -237,5 +237,28 @@ public class HealthController {
         String json=JSON.toJSONString(doctorService.getConsTreatment(consId));
         return  json;
     }
+  //将id变为用户账号
+    @RequestMapping(value="/sendMessage")
+    @ResponseBody
+    public String sendMessage( @RequestBody String  json1 ){
+        Map maps = (Map)JSON.parse(json1);
+        String fromId=(String)maps.get("fromId");
+        String toId= (String) maps.get("toId");
+        String news=(String) maps.get("news");
+        Map <String ,String >map=new HashMap<>();
+        if(systemService.produce(fromId,toId,news)){
+            map.put("status","true");
+            return JSON.toJSONString(map);
+        }
+        map.put("status","false");
+        return JSON.toJSONString(map);
+        //json1 通信双方的账号 fromId,toId
+    }
+
+    @RequestMapping(value="/getMessage")
+    @ResponseBody
+    public String getMessage(@RequestBody String toId){
+        return JSON.toJSONString(systemService.consume(toId));
+    }
 }
 
